@@ -6,6 +6,9 @@
 #include "GameFramework/Character.h"
 #include "ShooterCharacter.generated.h"
 
+class UCameraComponent;
+class USpringArmComponent;
+
 UCLASS()
 class FPS_API AShooterCharacter : public ACharacter
 {
@@ -22,5 +25,14 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-
+	// 1st person view (camera).
+	UPROPERTY(VisibleAnywhere, Category = "FPS|Camera")
+	TObjectPtr<USpringArmComponent> CameraBoom;
+	
+	UPROPERTY(VisibleAnywhere, Category = "FPS|Camera")
+	TObjectPtr<UCameraComponent> FollowCamera;
+	
+	// 1st person view (arms).
+	UPROPERTY(VisibleAnywhere, Category = "FPS|Mesh")
+	TObjectPtr<USkeletalMeshComponent> Mesh1P;
 };
