@@ -9,6 +9,9 @@
 class UCameraComponent;
 class USpringArmComponent;
 
+/**
+ * 
+ */
 UCLASS()
 class FPS_API AShooterCharacter : public ACharacter
 {

@@ -4,6 +4,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 AShooterCharacter::AShooterCharacter()
 {
@@ -37,6 +38,8 @@ AShooterCharacter::AShooterCharacter()
 	GetMesh()->SetOnlyOwnerSee(false);
 	GetMesh()->SetOwnerNoSee(true);
 	GetMesh()->SetReceivesDecals(false);
+	
+	GetCharacterMovement()->MovementState.bCanCrouch = true;
 }
 
 void AShooterCharacter::BeginPlay()
