@@ -20,3 +20,33 @@ void UShooterCombatComponent::TickComponent(
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
 }
+
+void UShooterCombatComponent::Initiate_CycleWeapon()
+{
+	
+}
+
+void UShooterCombatComponent::Initiate_FireWeapon_Pressed()
+{
+	
+}
+
+void UShooterCombatComponent::Initiate_FireWeapon_Released()
+{
+	
+}
+
+void UShooterCombatComponent::Initiate_ReloadWeapon()
+{
+	
+}
+
+void UShooterCombatComponent::Initiate_AimWeapon_Pressed()
+{
+	
+}
+
+void UShooterCombatComponent::Initiate_AimWeapon_Released()
+{
+	
+}
