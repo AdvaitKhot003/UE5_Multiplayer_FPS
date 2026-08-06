@@ -5,6 +5,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Combat/ShooterCombatComponent.h"
 
 AShooterCharacter::AShooterCharacter()
 {
@@ -40,6 +41,9 @@ AShooterCharacter::AShooterCharacter()
 	GetMesh()->SetReceivesDecals(false);
 	
 	GetCharacterMovement()->MovementState.bCanCrouch = true;
+	
+	CombatComponent = CreateDefaultSubobject<UShooterCombatComponent>(TEXT("CombatComponent"));
+	CombatComponent->SetIsReplicated(true);
 }
 
 void AShooterCharacter::BeginPlay()

@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "ShooterCharacter.generated.h"
 
+class UShooterCombatComponent;
 class UCameraComponent;
 class USpringArmComponent;
 
@@ -23,11 +24,16 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	UShooterCombatComponent* GetCombatComponent() const { return CombatComponent; }
 
 protected:
 	virtual void BeginPlay() override;
 
 private:
+	UPROPERTY(VisibleAnywhere, Category = "FPS|Combat")
+	TObjectPtr<UShooterCombatComponent> CombatComponent;
+	
 	// 1st person view (camera).
 	UPROPERTY(VisibleAnywhere, Category = "FPS|Camera")
 	TObjectPtr<USpringArmComponent> CameraBoom;
