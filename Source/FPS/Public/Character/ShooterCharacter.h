@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "ShooterCharacter.generated.h"
 
+class UShooterInput_DataAsset;
 class UShooterCombatComponent;
 class UCameraComponent;
 class USpringArmComponent;
@@ -33,6 +34,19 @@ protected:
 private:
 	UPROPERTY(VisibleAnywhere, Category = "FPS|Combat")
 	TObjectPtr<UShooterCombatComponent> CombatComponent;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "FPS|Input")
+	TObjectPtr<UShooterInput_DataAsset> ShooterInputDataAsset;
+	
+	void Input_CycleWeapon();
+	
+	void Input_FireWeapon_Pressed();
+	void Input_FireWeapon_Released();
+	
+	void Input_ReloadWeapon();
+	
+	void Input_AimWeapon_Pressed();
+	void Input_AimWeapon_Released();
 	
 	// 1st person view (camera).
 	UPROPERTY(VisibleAnywhere, Category = "FPS|Camera")

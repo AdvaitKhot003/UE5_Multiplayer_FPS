@@ -6,6 +6,8 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Combat/ShooterCombatComponent.h"
+#include "EnhancedInput/ShooterInputComponent.h"
+#include "EnhancedInput/ShooterInput_DataAsset.h"
 
 AShooterCharacter::AShooterCharacter()
 {
@@ -61,5 +63,65 @@ void AShooterCharacter::Tick(float DeltaTime)
 void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	
+	UShooterInputComponent* ShooterInputComponent = CastChecked<UShooterInputComponent>(PlayerInputComponent);
+	check(ShooterInputDataAsset);
+	
+	check(ShooterInputDataAsset->CycleWeaponAction);
+	ShooterInputComponent->BindAction(
+		ShooterInputDataAsset->CycleWeaponAction, ETriggerEvent::Started, this,
+		&AShooterCharacter::Input_CycleWeapon);
+	
+	check(ShooterInputDataAsset->FireWeaponAction);
+	ShooterInputComponent->BindAction(
+		ShooterInputDataAsset->FireWeaponAction, ETriggerEvent::Started, this,
+		&AShooterCharacter::Input_FireWeapon_Pressed);
+	
+	ShooterInputComponent->BindAction(
+		ShooterInputDataAsset->FireWeaponAction, ETriggerEvent::Completed, this,
+		&AShooterCharacter::Input_FireWeapon_Released);
+	
+	check(ShooterInputDataAsset->ReloadWeaponAction);
+	ShooterInputComponent->BindAction(
+		ShooterInputDataAsset->ReloadWeaponAction, ETriggerEvent::Started, this,
+		&AShooterCharacter::Input_ReloadWeapon);
+	
+	check(ShooterInputDataAsset->AimWeaponAction);
+	ShooterInputComponent->BindAction(
+		ShooterInputDataAsset->AimWeaponAction, ETriggerEvent::Started, this,
+		&AShooterCharacter::Input_AimWeapon_Pressed);
+	
+	ShooterInputComponent->BindAction(
+		ShooterInputDataAsset->AimWeaponAction, ETriggerEvent::Completed, this,
+		&AShooterCharacter::Input_AimWeapon_Released);
+}
 
+void AShooterCharacter::Input_CycleWeapon()
+{
+	GetCombatComponent()->Initiate_CycleWeapon();
+}
+
+void AShooterCharacter::Input_FireWeapon_Pressed()
+{
+	GetCombatComponent()->Initiate_FireWeapon_Pressed();
+}
+
+void AShooterCharacter::Input_FireWeapon_Released()
+{
+	GetCombatComponent()->Initiate_FireWeapon_Released();
+}
+
+void AShooterCharacter::Input_ReloadWeapon()
+{
+	GetCombatComponent()->Initiate_ReloadWeapon();
+}
+
+void AShooterCharacter::Input_AimWeapon_Pressed()
+{
+	GetCombatComponent()->Initiate_AimWeapon_Pressed();
+}
+
+void AShooterCharacter::Input_AimWeapon_Released()
+{
+	GetCombatComponent()->Initiate_AimWeapon_Released();
 }
