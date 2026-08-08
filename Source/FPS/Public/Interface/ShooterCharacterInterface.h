@@ -25,4 +25,10 @@ class FPS_API IShooterCharacterInterface
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	FName GetWeaponAttachGripPoint(const FGameplayTag& WeaponType) const;
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	USkeletalMeshComponent* GetMesh1P() const;
+	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	USkeletalMeshComponent* GetMesh3P() const;
 };

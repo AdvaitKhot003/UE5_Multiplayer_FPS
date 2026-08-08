@@ -33,6 +33,8 @@ public:
 	
 	// Shooter Character Interface Start
 	virtual FName GetWeaponAttachGripPoint_Implementation(const FGameplayTag& WeaponType) const override;
+	virtual USkeletalMeshComponent* GetMesh1P_Implementation() const override;
+	virtual USkeletalMeshComponent* GetMesh3P_Implementation() const override;
 	// Shooter Character Interface End
 
 protected:

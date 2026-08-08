@@ -38,7 +38,10 @@ AShooterWeapon* UShooterCombatComponent::SpawnWeapon(const TSubclassOf<AShooterW
 
 void UShooterCombatComponent::SpawnInventory()
 {
-	AShooterWeapon* NewWeapon = SpawnWeapon(DefaultWeaponClass);
+	if (AShooterWeapon* NewWeapon = SpawnWeapon(DefaultWeaponClass))
+	{
+		NewWeapon->AttachWeaponToOwningPawn();
+	}
 }
 
 void UShooterCombatComponent::DestroyInventory()

@@ -1,6 +1,7 @@
 ﻿// No Copyright.
 
 #include "Weapon/ShooterWeapon.h"
+#include "Interface/ShooterCharacterInterface.h"
 
 AShooterWeapon::AShooterWeapon()
 {
@@ -27,4 +28,46 @@ void AShooterWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void AShooterWeapon::SetWeaponMeshVisibility(const APawn* OwningPawn)
+{
+	if (OwningPawn->IsLocallyControlled())
+	{
+		GetWeaponMesh1P()->SetHiddenInGame(false);
+		GetWeaponMesh3P()->SetHiddenInGame(true);
+	}
+	else
+	{
+		GetWeaponMesh1P()->SetHiddenInGame(true);
+		GetWeaponMesh3P()->SetHiddenInGame(false);
+	}
+}
+
+void AShooterWeapon::AttachWeaponToOwningPawn()
+{
+	const APawn* OwningPawn = GetInstigator();
+	if (!IsValid(OwningPawn) || !OwningPawn->Implements<UShooterCharacterInterface>()) return;
+	
+	SetWeaponMeshVisibility(OwningPawn);
+	
+	const FName AttachGripPoint = IShooterCharacterInterface::Execute_GetWeaponAttachGripPoint(OwningPawn, WeaponType);
+	
+	USkeletalMeshComponent* PawnMesh1P = IShooterCharacterInterface::Execute_GetMesh1P(OwningPawn);
+	USkeletalMeshComponent* PawnMesh3P = IShooterCharacterInterface::Execute_GetMesh3P(OwningPawn);
+	
+	if (!PawnMesh1P || !PawnMesh3P) return;
+	
+	GetWeaponMesh1P()->AttachToComponent(
+		PawnMesh1P, FAttachmentTransformRules::SnapToTargetNotIncludingScale, AttachGripPoint);
+	
+	GetWeaponMesh3P()->AttachToComponent(
+		PawnMesh3P, FAttachmentTransformRules::SnapToTargetNotIncludingScale, AttachGripPoint);
+}
+
+void AShooterWeapon::OnRep_Instigator()
+{
+	Super::OnRep_Instigator();
+	
+	AttachWeaponToOwningPawn();
 }

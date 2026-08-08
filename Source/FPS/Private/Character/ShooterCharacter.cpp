@@ -49,6 +49,23 @@ AShooterCharacter::AShooterCharacter()
 	CombatComponent->SetIsReplicated(true);
 }
 
+void AShooterCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void AShooterCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	
+	GetCombatComponent()->SpawnInventory();
+}
+
+void AShooterCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
 FName AShooterCharacter::GetWeaponAttachGripPoint_Implementation(const FGameplayTag& WeaponType) const
 {
 	const UShooterWeapon_DataAsset* ShooterWeaponDataAsset = GetCombatComponent()->ShooterWeaponDataAsset;
@@ -56,16 +73,14 @@ FName AShooterCharacter::GetWeaponAttachGripPoint_Implementation(const FGameplay
 	return ShooterWeaponDataAsset->WeaponGripPoints.FindChecked(WeaponType);
 }
 
-void AShooterCharacter::BeginPlay()
+USkeletalMeshComponent* AShooterCharacter::GetMesh1P_Implementation() const
 {
-	Super::BeginPlay();
-	
+	return Mesh1P;
 }
 
-void AShooterCharacter::Tick(float DeltaTime)
+USkeletalMeshComponent* AShooterCharacter::GetMesh3P_Implementation() const
 {
-	Super::Tick(DeltaTime);
-
+	return GetMesh();
 }
 
 void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -102,13 +117,6 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	ShooterInputComponent->BindAction(
 		ShooterInputDataAsset->AimWeaponAction, ETriggerEvent::Completed, this,
 		&AShooterCharacter::Input_AimWeapon_Released);
-}
-
-void AShooterCharacter::PossessedBy(AController* NewController)
-{
-	Super::PossessedBy(NewController);
-	
-	GetCombatComponent()->SpawnInventory();
 }
 
 void AShooterCharacter::Input_CycleWeapon()

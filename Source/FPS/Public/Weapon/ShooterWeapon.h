@@ -22,6 +22,10 @@ public:
 	FORCEINLINE USkeletalMeshComponent* GetWeaponMesh1P() const { return WeaponMesh1P; }
 	
 	FORCEINLINE USkeletalMeshComponent* GetWeaponMesh3P() const { return WeaponMesh3P; }
+	
+	void AttachWeaponToOwningPawn();
+	
+	virtual void OnRep_Instigator() override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -37,4 +41,6 @@ private:
 	// Weapon mesh: 3rd person view.
 	UPROPERTY(VisibleAnywhere, Category = "FPS|Mesh")
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh3P;
+	
+	void SetWeaponMeshVisibility(const APawn* OwningPawn);
 };
