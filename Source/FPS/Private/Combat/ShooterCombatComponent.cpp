@@ -1,6 +1,7 @@
 ﻿// No Copyright.
 
 #include "Combat/ShooterCombatComponent.h"
+#include "Weapon/ShooterWeapon.h"
 
 UShooterCombatComponent::UShooterCombatComponent()
 {
@@ -18,6 +19,30 @@ void UShooterCombatComponent::TickComponent(
 	float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	
+}
+
+AShooterWeapon* UShooterCombatComponent::SpawnWeapon(const TSubclassOf<AShooterWeapon> WeaponClassToSpawn) const
+{
+	AActor* OwnerActor = GetOwner();
+	if (!IsValid(OwnerActor)) return nullptr;
+	if (!OwnerActor->HasAuthority()) return nullptr;
+	
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Instigator = Cast<APawn>(OwnerActor);
+	SpawnParams.Owner = OwnerActor;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	
+	return GetWorld()->SpawnActor<AShooterWeapon>(WeaponClassToSpawn, SpawnParams);
+}
+
+void UShooterCombatComponent::SpawnInventory()
+{
+	AShooterWeapon* NewWeapon = SpawnWeapon(DefaultWeaponClass);
+}
+
+void UShooterCombatComponent::DestroyInventory()
+{
 	
 }
 

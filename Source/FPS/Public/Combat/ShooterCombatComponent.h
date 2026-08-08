@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "ShooterCombatComponent.generated.h"
 
+class AShooterWeapon;
 class UShooterWeapon_DataAsset;
 
 /**
@@ -25,6 +26,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "FPS|Weapon")
 	TObjectPtr<UShooterWeapon_DataAsset> ShooterWeaponDataAsset;
 	
+	void SpawnInventory();
+	void DestroyInventory();
+	
 	// Cycle to the next weapon in the inventory.
 	void Initiate_CycleWeapon();
 	
@@ -40,5 +44,8 @@ protected:
 	virtual void BeginPlay() override;
 	
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "FPS|Weapon")
+	TSubclassOf<AShooterWeapon> DefaultWeaponClass;
 	
+	AShooterWeapon* SpawnWeapon(const TSubclassOf<AShooterWeapon> WeaponClassToSpawn) const;
 };

@@ -104,6 +104,13 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		&AShooterCharacter::Input_AimWeapon_Released);
 }
 
+void AShooterCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	
+	GetCombatComponent()->SpawnInventory();
+}
+
 void AShooterCharacter::Input_CycleWeapon()
 {
 	GetCombatComponent()->Initiate_CycleWeapon();

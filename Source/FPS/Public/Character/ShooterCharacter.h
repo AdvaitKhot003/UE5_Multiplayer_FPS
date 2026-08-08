@@ -27,6 +27,8 @@ public:
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
+	virtual void PossessedBy(AController* NewController) override;
+	
 	UShooterCombatComponent* GetCombatComponent() const { return CombatComponent; }
 	
 	// Shooter Character Interface Start
