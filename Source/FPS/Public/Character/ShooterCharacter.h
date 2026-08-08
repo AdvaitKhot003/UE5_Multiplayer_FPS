@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Interface/ShooterCharacterInterface.h"
 #include "ShooterCharacter.generated.h"
 
 class UShooterInput_DataAsset;
@@ -15,7 +16,7 @@ class USpringArmComponent;
  * 
  */
 UCLASS()
-class FPS_API AShooterCharacter : public ACharacter
+class FPS_API AShooterCharacter : public ACharacter, public IShooterCharacterInterface
 {
 	GENERATED_BODY()
 
@@ -27,6 +28,10 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	UShooterCombatComponent* GetCombatComponent() const { return CombatComponent; }
+	
+	// Shooter Character Interface Start
+	virtual FName GetWeaponAttachGripPoint_Implementation(const FGameplayTag& WeaponType) const override;
+	// Shooter Character Interface End
 
 protected:
 	virtual void BeginPlay() override;

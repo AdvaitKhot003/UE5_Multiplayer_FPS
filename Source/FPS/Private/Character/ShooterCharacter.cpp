@@ -8,6 +8,7 @@
 #include "Combat/ShooterCombatComponent.h"
 #include "EnhancedInput/ShooterInputComponent.h"
 #include "EnhancedInput/ShooterInput_DataAsset.h"
+#include "Weapon/ShooterWeapon_DataAsset.h"
 
 AShooterCharacter::AShooterCharacter()
 {
@@ -46,6 +47,13 @@ AShooterCharacter::AShooterCharacter()
 	
 	CombatComponent = CreateDefaultSubobject<UShooterCombatComponent>(TEXT("CombatComponent"));
 	CombatComponent->SetIsReplicated(true);
+}
+
+FName AShooterCharacter::GetWeaponAttachGripPoint_Implementation(const FGameplayTag& WeaponType) const
+{
+	const UShooterWeapon_DataAsset* ShooterWeaponDataAsset = GetCombatComponent()->ShooterWeaponDataAsset;
+	check(ShooterWeaponDataAsset);
+	return ShooterWeaponDataAsset->WeaponGripPoints.FindChecked(WeaponType);
 }
 
 void AShooterCharacter::BeginPlay()
