@@ -23,6 +23,8 @@ public:
 	virtual void TickComponent(
 		float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "FPS|Weapon")
 	TObjectPtr<UShooterWeapon_DataAsset> ShooterWeaponDataAsset;
 	
@@ -44,8 +46,11 @@ protected:
 	virtual void BeginPlay() override;
 	
 private:
+	UPROPERTY(Transient, Replicated)
+	TArray<AShooterWeapon*> Inventory;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "FPS|Weapon")
-	TSubclassOf<AShooterWeapon> DefaultWeaponClass;
+	TArray<TSubclassOf<AShooterWeapon>> DefaultWeaponClasses;
 	
 	AShooterWeapon* SpawnWeapon(const TSubclassOf<AShooterWeapon> WeaponClassToSpawn) const;
 };

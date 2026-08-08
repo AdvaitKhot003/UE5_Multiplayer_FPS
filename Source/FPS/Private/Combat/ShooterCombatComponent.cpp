@@ -2,6 +2,7 @@
 
 #include "Combat/ShooterCombatComponent.h"
 #include "Weapon/ShooterWeapon.h"
+#include "Net/UnrealNetwork.h"
 
 UShooterCombatComponent::UShooterCombatComponent()
 {
@@ -22,6 +23,13 @@ void UShooterCombatComponent::TickComponent(
 	
 }
 
+void UShooterCombatComponent::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME(UShooterCombatComponent, Inventory);
+}
+
 AShooterWeapon* UShooterCombatComponent::SpawnWeapon(const TSubclassOf<AShooterWeapon> WeaponClassToSpawn) const
 {
 	AActor* OwnerActor = GetOwner();
@@ -38,10 +46,19 @@ AShooterWeapon* UShooterCombatComponent::SpawnWeapon(const TSubclassOf<AShooterW
 
 void UShooterCombatComponent::SpawnInventory()
 {
-	if (AShooterWeapon* NewWeapon = SpawnWeapon(DefaultWeaponClass))
+	const AActor* OwnerActor = GetOwner();
+	if (!IsValid(OwnerActor)) return;
+	if (!OwnerActor->HasAuthority()) return;
+	
+	for (const TSubclassOf<AShooterWeapon>& WeaponClass : DefaultWeaponClasses)
 	{
-		NewWeapon->AttachWeaponToOwningPawn();
+		AShooterWeapon* ShooterWeapon = SpawnWeapon(WeaponClass);
+		if (!IsValid(ShooterWeapon)) continue;
+		Inventory.AddUnique(ShooterWeapon);
 	}
+	
+	if (Inventory.IsEmpty()) return;
+	Inventory[0]->AttachWeaponToOwningPawn();
 }
 
 void UShooterCombatComponent::DestroyInventory()
